@@ -19,6 +19,11 @@ For example,
 - Normal users and Admins will be required to create an account and authenticate it. 
 
 ## <br><a id="dockerInfo">Docker Information:</a>
+Read to reproduce the project :
+
+As an introduction to dockers, we strongly recommend reading the docker information <a href="https://docs.docker.com/get-started/docker-overview/">Here</a>
+
+Furthermore, you will need to install Docker on your computer if you haven't already (<a href="https://www.docker.com/get-started/">Here</a>)
 
 
 ## <br><a id="team">Team Composition:</a>
