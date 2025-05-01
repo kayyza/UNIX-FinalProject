@@ -1,5 +1,13 @@
 # Unix Final Project:
-## <br><br>Project Description:
+<br><br>
+
+## Table of Contents
+
+[Project Description](#projectDescription)
+[Docker Information](#dockerInfo)
+[Team](#team)
+
+## <br><br><a id="projectDescription">Project Description:</a>
 This project serves to host a static website that will display user's  portfolios online using a GNU/Linux web server. This will be implemented with the combination of manual deployment from our developers and auto-deployment so that the website keeps up to date with the github repository. <br><br>
 To do so, the project requires the seting up of a VPS, and the set up a domain name for the website. <br><br>
 This will allow our team members to handle basic system setup and security.<br><br>
@@ -10,9 +18,10 @@ For example,
 
 - Normal users and Admins will be required to create an account and authenticate it. 
 
+## <br><a id="dockerInfo">Docker Information:</a>
 
 
-## <br>Team Composition:
+## <br><a id="team">Team Composition:</a>
  - Helene Rousseau
  - Rachel Herron
  - Sabrin Robinson
