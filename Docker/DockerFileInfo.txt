@@ -1,0 +1,6 @@
+FROM ubuntu
+MAINTAINER Ash helene.m.rousseau@gmail.com
+RUN apt-get update
+CMD ["echo", "DockerFile running..."]
+docker build . -f Dockerfile.txt
+
