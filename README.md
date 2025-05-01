@@ -3,9 +3,9 @@
 
 ## Table of Contents
 
-[Project Description](#projectDescription)
-[Docker Information](#dockerInfo)
-[Team](#team)
+[Project Description](#projectDescription) <br>
+[Docker Information](#dockerInfo) <br>
+[Team](#team) <br>
 
 ## <br><br><a id="projectDescription">Project Description:</a>
 This project serves to host a static website that will display user's  portfolios online using a GNU/Linux web server. This will be implemented with the combination of manual deployment from our developers and auto-deployment so that the website keeps up to date with the github repository. <br><br>
