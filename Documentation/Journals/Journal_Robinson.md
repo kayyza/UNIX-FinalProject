@@ -1,7 +1,7 @@
 Journal belongs to: Sabrina Robinson
 # Journal entry #1:
 
-<b>Date</b>: 2025-04-28<br>
+**Date**: 2025-04-28<br>
 <b>Time spend</b>: ≈ 3 hours<br>
 <b>Time spent Working on</b>:<br><br>
     <i>Most of my time was spent on the Major Technical Solutions. My task was to find possible platforms that we could use to fulfill our project's requirements, and compare those platforms to find the best solution for our situation.</i> <br>
