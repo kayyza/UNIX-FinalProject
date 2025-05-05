@@ -6,3 +6,6 @@ Week 1:
  - plan following weeks accordingly.
  - set up github repository
  - set up documentation files in github repository.
+
+ Week 2:
+ -
