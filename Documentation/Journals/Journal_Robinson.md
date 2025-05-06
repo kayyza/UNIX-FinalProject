@@ -22,4 +22,33 @@ Journal belongs to: Sabrina Robinson
 
     Unfortunately, I have other projects to work on and exams to perpare for so I didn't have additional work to offer. Though I plan to make up for that in time for the next journal entry, the next step is setting up and testing!
 
+# Journal entry #2:
 
+**Date**: 2025-05-05<br>
+<b>Time spend</b>: ≈ 3 hours<br>
+<b>Time spent Working on</b>:<br><br>
+
+Preparing Batch files: 
+    Starting with the configuration of the firewall. 
+    Learning how to use the UWF (uncomplicated firewall) with a focus on learning how to disable all external connections except over port 22, tcp protocol 
+
+    `apt install ufw`
+    `ufw default deny incoming`
+    `ufw defaul allow outgoing`
+    `ufw status `
+    
+to check if firewall has been activated
+you can into external system at this point. 
+
+    `ufw enable`
+if you try to login from the ssh on the external system while the firewall is active the connection 
+
+in the internal machine's terminal you can run this command to create a "hole" in the firewall. `ufw allow ssh` and/or `ufw allow 22`. Meaning that this is a known external connection and is allowed through the wall.
+
+if you attempt to login to the ssh now, it should ask you for a password.
+if one day you might want to remove this rule, you can do so with `ufw delete allow ssh`
+
+To block all ssh connections except for a specific ip address, you can use `ufw allow from [insert ip address here] to any port 22`
+
+I started to set up the actual files that we will need to compile in order to facilitate the reproduction of this project, 
+though its gettings late and i sense that I'm going to pass out at any moment.. so i will finish this tomoorw..
