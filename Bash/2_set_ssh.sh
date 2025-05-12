@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DEPLOY_USER="deployuser"
 
 echo "Creating a new sudo user named $DEPLOY_USER"
@@ -17,3 +19,5 @@ sudo sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/
 sudo systemctl reload sshd
 
 echo "SSH haandling complete."
+
+# For more information see: "https://www.ssh.com/academy/ssh-keys"
