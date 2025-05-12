@@ -51,4 +51,12 @@ if one day you might want to remove this rule, you can do so with `ufw delete al
 To block all ssh connections except for a specific ip address, you can use `ufw allow from [insert ip address here] to any port 22`
 
 I started to set up the actual files that we will need to compile in order to facilitate the reproduction of this project, 
-though its gettings late and i sense that I'm going to pass out at any moment.. so i will finish this tomoorw..
+though its gettings late and i sense that I'm going to pass out at any moment.. so i will finish this tomorrow..
+
+# Journal entry #3:
+**Date**: 2025-05-11<br>
+<b>Time spend</b>: ≈ TBD hours<br>
+<b>Time spent Working on</b>:<br><br>
+
+    While I started working on some of the scripts last week, I still feel like some of them area incomplete. So my focus for this session is to make them more robust and complete that way they'll provide more safety measures. 
+        I also didn't realize it at the time, but I had wrote my comments in the bash files as in batch comment's syntax. 
