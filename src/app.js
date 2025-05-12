@@ -1,6 +1,6 @@
 const express = require ('express');
-const app = expresss();
-const PORT = 8000;
+const app = express();
+const PORT = 9000;
 
 app.get('/', (req, res) => {
     res.send("The website is working!");
