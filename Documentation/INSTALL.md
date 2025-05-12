@@ -77,4 +77,53 @@ Set proper ownership and permissions for secure access.
 Verified that the .ssh directory and key file have secure permissions.
 Ensured only deploy can access SSH credentials.
 
+## 7. Install and Configure Nginx
+
+### Install Nginx
+```bash
+sudo apt update
+sudo apt install nginx -y
+```
+
+### Start and Enable Nginx
+```bash
+sudo systemctl start nginx
+sudo systemctl enable nginx
+```
+### Create Custom Site Configuration
+```bash
+sudo nano /etc/nginx/sites-available/mywebsite
+```
+
+Example config:
+```
+server {
+    listen 80;
+    server_name localhost;
+
+    root /var/www/mywebsite;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+```
+
+### Enable the Site
+```bash
+sudo ln -s /etc/nginx/sites-available/mywebsite /etc/nginx/sites-enabled/
+```
+
+### Create Web Directory
+```bash
+sudo mkdir -p /var/www/mywebsite
+sudo chown -R $USER:$USER /var/www/mywebsite
+```
+
+### Test Configuration and Reload Nginx
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
 
