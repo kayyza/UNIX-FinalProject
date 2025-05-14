@@ -7,7 +7,7 @@ CRON_FILE="/etc/cron.d/project_maintenance"
 sudo tee $CRON_FILE > /dev/null <<EOF
 
 # SSL certificate renewal should run daily at 2:30am
-/30 2 * * * root certbot renew --quiet
+30 2 * * * root certbot renew --quiet
 
 # Daily backup at 3:00am
 0 3 * * * root /bin/bash /path/to/8_backup.sh >> /var/log/backup.log 2>&1
