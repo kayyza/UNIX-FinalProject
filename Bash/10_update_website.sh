@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Navigate to the website directory
-cd /var/www/mywebsite
+cd /var/www/UNIX-FinalProject
 
 # Pull the latest changes from Git repository
 git pull origin main
