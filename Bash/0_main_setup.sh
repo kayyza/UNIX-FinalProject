@@ -58,7 +58,7 @@ if [ $setupChoice = 2] then
     ;;
 
     echo "Checking if docker is installed..."
-    bash ./10_dockerInstaller.sh
+    bash ./11_dockerInstaller.sh
 
 else
     echo "Creating ssh for <deployuser>..."
@@ -85,7 +85,7 @@ else
     bash ./7_setup_webhook_listener.sh
     
     echo "Checking if docker is installed..."
-    bash ./10_dockerInstaller.sh
+    bash ./11_dockerInstaller.sh
 fi
 
 read -p "Press A to use the advanced setup or enter to continue to default setup" user_ans
