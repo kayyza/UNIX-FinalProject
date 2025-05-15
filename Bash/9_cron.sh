@@ -10,7 +10,7 @@ sudo tee $CRON_FILE > /dev/null <<EOF
 30 2 * * * root certbot renew --quiet
 
 # Daily backup at 3:00am
-0 3 * * * root /bin/bash /var/www/mywebsite/Bash/8_backup.shh >> /var/log/backup.log 2>&1
+0 3 * * * root /bin/bash /var/www/mywebsite/Bash/8_backup.sh >> /var/log/backup.log 2>&1
 EOF
 
 echo "The Cron services are reloading"
