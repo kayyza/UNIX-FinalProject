@@ -12,29 +12,33 @@ WEBSITE_NAME="$4"
 PORT="$5"
 LOG_FILE="/var/log/deploy.log"
 
+RED='\033[1;91m'
+GREEN='\033[1;32m'
+NC='\033[0m'
+
 exec > >(tee -i $LOG_FILE)
 exec 2>&1
 
 cd $REPO_DIR || {
-        echo "[❗ERROR❗] Failed to access the repository's directory";
+        echo -e "${RED} [❗ERROR❗] Failed to access the repository's directory ${NC}";
         exit 1;
 }
 
 
 #--> Clearing existing site content
 rm -rf $SITE_DIR && mkdir -p $SITE_DIR || {
-        echo "[❗ERROR❗] Failed to reset the site's directory"
+        echo -e "${RED} [❗ERROR❗] Failed to reset the site's directory ${NC}"
 }
 
 #--> Attempting to mirror website from $MIRROR_URL
 wget --mirror --convert-links --adjust-extension --page-requisites --no-parent $MIRROR_URL -P $SITE_DIR || {
-        echo "[❗ERROR❗] Failed to mirror the website";
+        echo -e "${RED} [❗ERROR❗] Failed to mirror the website ${NC}";
         exit 1;
 }
 
 #--> Moving site files
 mv $SITE_DIR/sr-delightfully.github.io/portfolio-2023/* $SITE_DIR/ || { #shouldn't this be the URL to mirror?
-        echo "[❗ERROR❗] Failed to move site files";
+        echo -e "${RED} [❗ERROR❗] Failed to move site files ${NC}";
         exit 1;
 }.
 rm -rf $SITE_DIR/sr-delightfully.github.io/portfolio-2023/ #shouldn't this be the URL to mirror?
@@ -46,7 +50,7 @@ CONTAINER_NAME="${WEBSITE_NAME}_container"
 
 
 docker build -t "$IMAGE_NAME" "$SITE_DIR" || { #Building the image from the Dockerfile in $SITE_DIR
-  echo "[❗ERROR❗] Failed to build Docker image";
+  echo -e "${RED} [❗ERROR❗] Failed to build Docker image ${NC}";
   exit 1;
 }
 
@@ -58,11 +62,11 @@ docker run -d \
   "$IMAGE_NAME" 
   
   || {
-    echo "[❗ERROR❗] Failed to start Docker container";
+    echo -e "${RED} [❗ERROR❗] Failed to start Docker container ${NC}";
     exit 1;
     }
 
-echo "Deployed completed '$CONTAINER_NAME' serving at http://localhost:${PORT}"
+echo -e "${GREEN} Deployed completed '$CONTAINER_NAME' serving at http://localhost:${PORT} ${NC}"
 
 # For more information see: "https://docs.docker.com/compose/"
 # and see: "https://www.gnu.org/software/wget/manual/wget.html"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DOMAIN="[insert-domain-here.com]"
-EMAIL="admin@insert-domain-here.com"
+DOMAIN="$1"
+EMAIL="$2"
 
 # Installing CertBot and SSL dependencies
 sudo apt update

@@ -1,92 +1,92 @@
 #!/bin/bash
 #application to mirror the website / run the container
 
+RED='\033[1;91m'
+ORANGE='\033[0;33m]'
+GREEN='\033[1;32m'
+NC='\033[0m'
+
 user_name=$(whoami) #checks who is the current user and puts in a variable
 user_os=$(uname -s)
+username=""
 
 echo "Hi $user_name!"
 echo "You seem to want to host your own website! Let's get started!"
+echo ""
+echo "Menu___________________________"
+echo "1. Automatic setup"
+echo "2. Advanced setup"
+read -p "->  " setupChoice
 
-# Check if Docker is installed ---
-if ! command -v docker &> /dev/null; then
-    echo "Docker is not installed. Attempting to install Docker..."
+if [ $setupChoice = 2] then 
+    read -p "Create ssh ? (y/N)" userAns
+    if [[ "${userAns}" == "Y" || "${userAns}" == "y" ]]; then
+        echo "SSH creation..."
+        read -p "Deploying unsername : " $username
+        bash ./2_set_ssh.sh "$username"
+        echo -e "${GREEN} ssh configured successfully ! ${NC} "
+    else 
+        echo "No SSH created"
+    fi
+    ;;
 
-    # Detect OS
-    case "$user_os" in
-      Linux)
-        echo "Detected Linux"
-        curl -fsSL https://get.docker.com -o get-docker.sh
-        sh get-docker.sh
-        rm get-docker.sh
-        ;;
+    read -p "Configure firewall ? (y/N)" userAns1
+    if [[ "${userAns1}" == "Y" || "${userAns1}" == "y" ]]; then
+        echo -e "Log file : /var/log/firewall_setup.log"
+        bash ./3_config_firewall.sh
+    else 
+        echo "No firewall configured : all ports are open and available"
+    fi
+    ;;
 
-      Darwin)
-        echo "Detected macOS, trying to install through Homebrew..."
-        if {
-            command -v brew &> /dev/null; then
-            #echo "Installing Docker via Homebrew..."
-            brew install --cask docker
-        } || {
-            echo "Homebrew not working or not installed. Trying to install through terminal..."
-            curl -fsSL "$DMG_URL" -o "$DMG_PATH" #grabs the Docker installation from the website
-            sudo hdiutil attach "$DMG_PATH" #mounts the installation
-            sudo /Volumes/Docker/Docker.app/Contents/MacOS/install --accept-license #runs the installation and automatically accepts the license
-            sudo hdiutil detach /Volumes/Docker
-            rm -f "$DMG_PATH" # recursive cleanup
-        }
-        else
-          echo "[❗ERROR❗] unable to automatically install Docker -> please install Docker Desktop manually from https://www.docker.com/products/docker-desktop/"
-          exit 1
-        fi
-        ;;
+    read -p "Configure permissions ? (y/N)" userAns2
+    if [[ "${userAns2}" == "Y" || "${userAns2}" == "y" ]]; then
+        echo -e "Web directory : /var/www/html"
+        bash ./4_set_perms.sh "$username"
+    else 
+        echo "No permission configured"
+    fi
+    ;;
 
-      CYGWIN*|MINGW*|MSYS*)
-        echo "Detected Windows-like environment"
-        {
-            # Enable the WSL 2 feature on Windows
-            wsl --install --no-distribution
-            # Download the Docker Desktop installer
-            $INSTALLER="DockerDesktopInstaller.exe"
-            Invoke-WebRequest `
-                -Uri https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe `
-                -OutFile $INSTALLER
+    read -p "Setup webhook listener ? (y/N)" userAns3
+    if [[ "${userAns3}" == "Y" || "${userAns3}" == "y" ]]; then
+        echo -e "Web directory : /var/www/html"
+        bash ./7_setup_webhook_listener.sh
+    else 
+        echo "No webhook listener configured"
+    fi
+    ;;
 
-            Start-Process `
-                -FilePath ".\${INSTALLER}" ` # Install Docker Desktop 
-                -Wait `
-                -ArgumentList @(
-                    'install'
-                    '--quiet'
-                    '--accept-license'
-                )
-            Remove-Item ".\${INSTALLER}" # Clean up the installer file
-        } || {
-            echo "[❗ERROR❗] Please install Docker Desktop for Windows from https://www.docker.com/products/docker-desktop/ and ensure it's running"
-            exit 1
-        }
-        ;;
+    echo "Checking if docker is installed..."
+    bash ./10_dockerInstaller.sh
 
-      *)
-        echo "[❗ERROR❗] Unsupported OS: $(uname -s). Please install Docker manually from https://www.docker.com/products/docker-desktop/"
-        exit 1
-        ;;
-    esac
+else
+    echo "Creating ssh for <deployuser>..."
+    echo "."
+    echo "."
+    bash ./2_set_ssh.sh "deployuser"
+    echo -e "${GREEN} ssh configured successfully ! ${NC} "
+    
+    echo "Configuring firewall..."
+    echo "."
+    echo "."
+    bash ./3_config_firewall.sh
+    echo -e "${GREEN} firewall configured successfully ! ${NC} "
 
-    echo "Docker is installed !"
-    # Wait for docker daemon to be up (optional)
-    echo "Waiting for Docker to start..."
-    sleep 5
-else 
-    echo "Docker already installed !"
-    sleep 5
+    echo "Configuring permissions as <deployuser>..."
+    echo "."
+    echo "."
+    bash ./4_set_perms.sh "deployuser"
+    echo -e "${GREEN} firewall configured successfully ! ${NC} "
+
+    echo "Creating webhook listener..."    
+    echo "."
+    echo "."
+    bash ./7_setup_webhook_listener.sh
+    
+    echo "Checking if docker is installed..."
+    bash ./10_dockerInstaller.sh
 fi
-
-#!/bin/bash
-
-#REPO_DIR="/home/deployuser/UNIX-FinalProject"
-#SITE_DIR="$REPO_DIR/[insert site here]"
-#MIRROR_URL="https://sr-delightfully.github.io/portfolio-2023/"
-#LOG_FILE="/var/log/deploy.log"
 
 read -p "Press A to use the advanced setup or enter to continue to default setup" user_ans
 
@@ -105,13 +105,15 @@ if [[ "${user_ans}" == "A" || "${user_ans}" == "a" ]]; then
     read -p "Input the website name please : " WEBSITE_NAME
     echo $WEBSITE_NAME
     
-    read -p "Define running port of the website (suggested : port 80 OR 3000) : " PORT
+    echo "Define running port of the website"
+    echo -e "${ORANGE} ⚠️If the firewal has been setup beforehand, only port 22 and 80 are open⚠️ ${NC}"
+    read -p "suggested : port 80, 22, or 3000 if there was no firewall setup : " PORT
     echo $PORT
 
 else
     REPO_DIR="/home/deployuser/UNIX-FinalProject"
     SITE_DIR="${REPO_DIR%/}/hosted_website"
-    PORT="3000"
+    PORT="80"
     
     read -p "input the URL of the website to mirror : " MIRROR_URL
     echo $MIRROR_URL
@@ -120,20 +122,20 @@ else
     echo $WEBSITE_NAME
 fi
 
-echo
-echo "-> Using:"
-echo "   REPO_DIR    = ${REPO_DIR}"
-echo "   SITE_DIR    = ${SITE_DIR}"
-echo "   MIRROR_URL  = ${MIRROR_URL}"
-echo "   WEBSITE_NAME= ${WEBSITE_NAME}"
-echo "   PORT        = ${PORT}"
-echo
+echo "${GREEN} Setup completed !"
+echo "${GREEN} -> Using:"
+echo "${GREEN}    REPO_DIR    = ${REPO_DIR}"
+echo "${GREEN}    SITE_DIR    = ${SITE_DIR}"
+echo "${GREEN}    MIRROR_URL  = ${MIRROR_URL}"
+echo "${GREEN}    WEBSITE_NAME= ${WEBSITE_NAME}"
+echo "${GREEN}    PORT        = ${PORT}"
+echo "${NC}"
 
 #ensuring everything is there and working... -> doing this later ..?
 #rm -rf "${SITE_DIR}"
 #mkdir -p "${SITE_DIR}"
 
-echo "--------> chose option"
+echo "Menu___________________________"
 echo "1 . Mirror a static github page website"
 echo "2 . Host a node-based webiste"
 read -p "-> " user_ans
@@ -145,7 +147,7 @@ if [ $user_ans = 1 ]; then
             FROM nginx:alpine
             RUN rm -rf /usr/share/nginx/html/* # Remove default welcome page
             COPY . /usr/share/nginx/html # Copy all static files into nginx’s html dir
-            EXPOSE 80
+            EXPOSE $PORT
             CMD ["nginx", "-g", "daemon off;"]
             EOF
 
@@ -160,13 +162,47 @@ elif [ $user_ans = 2 ]; then
             WORKDIR /app/
             COPY src/ /app/
             RUN npm install
-            EXPOSE 3000
+            EXPOSE $PORT
             CMD [ "node", "app.js" ]
             EOF
 
     echo "$dockerfile_content" > "$SITE_DIR/Dockerfile"
     #bash ./6_deploy.sh "$REPO_DIR" "$SITE_DIR" "$MIRROR_URL" "$WEBSITE_NAME" "$PORT"
 else
-    echo "[❗ERROR❗] invalid answer... Exiting hosting wizard :(";
+    echo -e "${RED} [❗ERROR❗] invalid answer... Exiting hosting wizard :( ${NC}";
     exit 1;
 fi
+
+if [[ $setupChoice = 2 && $user_ans = 1 ]] then 
+    read -p "please enter your email : " EMAIL
+    bash '.5_ssl_setup.sh' "$MIRROR_URL" "$EMAIL"
+elif [ $setupChoice = 2 ] then
+    read -p "Create backup ? (y/N)" userAns3
+    
+    if [[ "${userAns3}" == "Y" || "${userAns3}" == "y" ]]; then
+        bash "./8_backup.sh"
+    else 
+        echo "No backup made"
+    fi
+    ;;
+
+    read -p "Create cron ? (y/N)" userAns4
+    if [[ "${userAns4}" == "Y" || "${userAns4}" == "y" ]]; then
+        bash "./9_cron.sh"
+        echo "cron file : /etc/cron.d/project_maintenance"
+        echo "SSL certificate renewal should run daily at 2:30am"
+    else 
+        echo "No cron made"
+    fi
+    ;;
+
+else 
+    bash "./8_backup.sh"
+    bash "./9_cron.sh"
+fi
+;;
+
+echo -e "${GREEN} setup finished ! "
+echo -e "${GREEN} Wizard will exit in 5 ! ${NC} "
+sleep 5
+exit 0;

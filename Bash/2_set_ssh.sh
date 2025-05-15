@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEPLOY_USER="deployuser"
+DEPLOY_USER="$1"
 
 echo "Creating a new sudo user named $DEPLOY_USER"
 sudo adduser $DEPLOY_USER

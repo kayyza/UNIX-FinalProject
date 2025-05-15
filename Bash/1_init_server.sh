@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "."
+echo "."
+echo "."
 echo "Initializing the server, upgrading and updating"
 
 echo "Updating system packages"
