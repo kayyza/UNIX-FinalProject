@@ -126,4 +126,95 @@ sudo chown -R $USER:$USER /var/www/mywebsite
 sudo nginx -t
 sudo systemctl reload nginx
 ```
+## 8. Clone the Project Repository
 
+Clone your GitHub repository into the appropriate web directory:
+
+```bash
+cd /var/www
+sudo git clone https://github.com/your-username/yourProject.git
+```
+
+Set the correct ownership:
+``` bash
+sudo chown -R www-deploy:www-deploy /var/www/yourProject
+```
+
+## 9. Configure Nginx to Serve the Cloned Project
+Update your Nginx site configuration:
+``` bash
+sudo nano /etc/nginx/sites-available/mywebsite
+```
+Update the contents of this file:
+``` bash
+server {
+    listen 80;
+    server_name localhost;
+
+    root /var/www/yourProject;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+```
+
+Reload Nginx:
+``` bash
+sudo systemctl reload nginx
+```
+10. Write a Deployment Script
+
+Create a shell script that pulls the latest changes from the repository.
+``` bash
+sudo nano /var/www/UNIX-FinalProject/Bash/10_update_website.sh
+```
+
+Paste the following into the file:
+``` bash
+#!/bin/bash
+
+cd /var/www/UNIX-FinalProject
+git reset --hard
+git pull origin main
+
+Make the script executable:
+
+chmod +x /var/www/UNIX-FinalProject/Bash/10_update_website.sh
+```
+
+## 11. Set Up Cron Job for Auto-Deployment
+Create a cron job to pull the latest changes from GitHub every minute.
+
+
+
+1. Create a new cron file:
+``` bash
+sudo nano /etc/cron.d/project_maintenance
+```
+2. Edit the file with this code:
+``` bash
+* * * * * root /bin/bash /var/www/UNIX-FinalProject/Bash/10_update_website.sh >> /var/log/deploy.log 2>&1
+```
+3. Restart the cron service:
+``` bash
+sudo systemctl restart cron
+```
+
+## 12. Make the Deployment Script Executable
+Ensure your deployment script has the proper permissions:
+
+``` bash
+chmod +x /var/www/UNIX-FinalProject/Bash/10_update_website.sh
+```
+## 13. Test the cron job
+Manually test the deployment script:
+```bash 
+/bin/bash /var/www/UNIX-FinalProject/Bash/10_update_website.sh
+```
+You can then check the deployment log:
+```bash
+cat /var/log/deploy.log
+```
+Push a change to your GitHub repository and verify that the update appears on the site
