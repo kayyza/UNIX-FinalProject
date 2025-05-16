@@ -3,20 +3,12 @@
 CRON_FILE="/etc/cron.d/project_maintenance"
 
 # Creating cron job file at $CRON_FILE
-
 sudo tee $CRON_FILE > /dev/null <<EOF
-
-# SSL certificate renewal should run daily at 2:30am
-30 2 * * * root certbot renew --quiet
-
-# Daily backup at 3:00am
-0 3 * * * root /bin/bash /var/www/mywebsite/Bash/8_backup.sh >> /var/log/backup.log 2>&1
+# Run auto-deployment every minute
+* * * * * root /bin/bash /var/www/UNIX-FinalProject/Bash/10_update_website.sh >> /var/log/deploy.log 2>&1
 EOF
 
-echo "The Cron services are reloading"
-sudo systemctl reload cron
+echo "Reloading cron service"
+sudo systemctl restart cron
 
-echo "Cron jobs has been installed"
-
-# For more information see: "https://help.ubuntu.com/community/CronHowto"
-# and see: "https://crontab.guru/"
+echo "Cron jobs installed and running every minute"

@@ -11,7 +11,7 @@ Week 1:
  - Set up DigitalOcean VPS
  - Install Docker & Docker compose
  - Configure SSH access and create deployment user
- - test mirroring
+ - test hosting website
 
  Week 3: 
  - Set up webhook for auto-deployment
