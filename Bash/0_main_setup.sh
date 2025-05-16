@@ -87,6 +87,7 @@ else
     echo "Checking if docker is installed..."
     bash ./11_dockerInstaller.sh
 fi
+;;
 
 read -p "Press A to use the advanced setup or enter to continue to default setup" user_ans
 
@@ -121,6 +122,7 @@ else
     read -p "Input the website name please : " WEBSITE_NAME
     echo $WEBSITE_NAME
 fi
+;;
 
 echo "${GREEN} Setup completed !"
 echo "${GREEN} -> Using:"
@@ -172,6 +174,7 @@ else
     echo -e "${RED} [❗ERROR❗] invalid answer... Exiting hosting wizard :( ${NC}";
     exit 1;
 fi
+;;
 
 if [[ $setupChoice = 2 && $user_ans = 1 ]] then 
     read -p "please enter your email : " EMAIL
